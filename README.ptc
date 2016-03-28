@@ -1,0 +1,33 @@
+README for ptc
+
+PTC is a Pascal-to-C translator that handles just about the subset of
+Pascal that is used in the picoProlog interpreter.  Since that subset
+is more-or-less the intersection of Pascal and C, the job is not too
+difficult.
+
+Features of Pascal that aren't implemented:
+
+	Nested procedures
+	Procedures as parameters
+	Array parameters passed by value
+	Arrays indexed by other than integer ranges
+	Sets
+	Typed file I/O
+	Width specifications (they're ignored)
+	Reading other than characters
+	Writing other than integers, characters or string constants
+
+Features of Pascal that are implemented especially badly (in that
+errors will result in a bad C program as the output):
+
+	Check for assignment to a non-variable
+	Check that labels are declared and placed exactly once
+	Check bounds of constant string parameters
+	Multiple declarations
+	Type check for case labels
+	Check forward procs get defined
+	Check forward proc has proc def, func has func def
+	Check real defn has same params as forward defn
+	'String' type is bogus: use array of char instead
+	Var parameters
+	For loop bounds
