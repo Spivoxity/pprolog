@@ -24,6 +24,19 @@ ppp.c: ppp.p ptc
 	./ptc $< >$@
 
 
+# Alternate build using Free Pascal
+FPC = fpc
+
+fp-pprolog: fp-pprolog.p
+	$(FPC) -o$@ $^
+
+fp-pprolog.p: pprolog.x fp-ppp
+	(echo "define(fpc)"; cat pprolog.x) | ./fp-ppp >fp-pprolog.p
+
+fp-ppp: ppp.p
+	$(FPC) -o$@ $^
+
+
 # Pascal to C translator
 
 PTC = main.o sem.o expr.o type.o symtab.o emit.o library.o parse.o scan.o
@@ -45,7 +58,7 @@ scan.c: scan.l
 # Cleanup
 clean: force
 	rm -f ptc ppp pprolog *.o ppp.c pprolog.c pprolog.p \
-		parse.c parse.h scan.c
+		parse.c parse.h scan.c fp-ppp fp-pprolog fp-pprolog.p 
 
 force:
 

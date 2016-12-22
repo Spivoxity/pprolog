@@ -1,0 +1,25 @@
+syntax: glob
+.hgignore
+emit.o
+expr.o
+fp-ppp
+fp-pprolog
+fp-pprolog.o
+fp-pprolog.p
+library.o
+main.o
+parse.c
+parse.h
+parse.o
+ppp
+ppp.c
+ppp.o
+pprolog
+pprolog.c
+pprolog.p
+ptc
+scan.c
+scan.o
+sem.o
+symtab.o
+type.o

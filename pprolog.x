@@ -13,6 +13,10 @@
 
 program &picoProlog(input, output);
 
+ifdef(fpc,uses sysutils;)
+
+ifdef(fpc,type integer = longint;)
+
 { tunable parameters }
 const
   &MAXSYMBOLS = 511;  { max no. of symbols }
@@ -58,6 +62,12 @@ define(&default, else)
   the progress messages from the garbage collector. }
 define(&flush_out)
 ifdef(ptc,define(&flush_out,flush))
+
+{ In Free Pascal, a function name acts as a variable throughout the function
+  body, and that means that a recursive call to a paramaterless function
+  must have empty parentheses if we are to avoid a horrendous bug. }
+define(funcall)
+ifdef(fpc,define(funcall,()))
 
 { Pascal's numeric labels make code that uses |goto| statements
   unnecessarily obscure, so we define a few macros that have
@@ -429,6 +439,8 @@ function Key(t: term; e: frame): integer; forward;
   allow the parameter list to be repeated and check that the
   two lists agree. }
 define(&fwd)
+ifdef(fpc,define(&fwd,$1))
+
 
 {S Symbol table }
 
@@ -477,8 +489,7 @@ begin
   p := h+1;
   while s_name(p) <> -1 do begin
     if StringEqual(name, s_name(p)) then goto found;
-    decr(p);
-    if p = 0 then p := MAXSYMBOLS
+    if p = 1 then p := MAXSYMBOLS else decr(p)
   end;
 
   { Not found: enter a new symbol }
@@ -1097,7 +1108,7 @@ begin
     ParseFactor := t
   else begin
     Eat(COLON);
-    ParseFactor := MakeNode(cons, t, ParseFactor)
+    ParseFactor := MakeNode(cons, t, ParseFactor funcall)
   end
 end;
 
@@ -2064,6 +2075,19 @@ begin
     end
   until c = NULL
 end;
+
+ifdef(fpc,define(argc,paramcount+1)
+  define(argv,$2 := paramstr($1))
+  define(closein,close($1)))
+
+ifdef(fpc,function openin(var f: text; s: tempstring): boolean;
+  begin
+    if not fileexists(s) then
+      openin := false
+    else begin
+      assign(f, s); reset(f); openin := true
+    end
+  end;)
 
 { |ReadProgram| -- read files listed on command line }
 procedure &ReadProgram;
