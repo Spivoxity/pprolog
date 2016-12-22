@@ -2,7 +2,6 @@
 
 all: pprolog
 
-
 # The interpreter itself
 
 pprolog: pprolog.c ptclib.i
@@ -36,12 +35,9 @@ fp-pprolog.p: pprolog.x fp-ppp
 fp-ppp: ppp.p
 	$(FPC) -o$@ $^
 
-
 # Pascal to C translator
 
 PTC = main.o sem.o expr.o type.o symtab.o emit.o library.o parse.o scan.o
-
-all: ptc ptclib.i
 
 ptc: $(PTC)
 	$(CC) $(CFLAGS) -o ptc $(PTC)
@@ -53,7 +49,6 @@ parse.c parse.h: parse.y
 
 scan.c: scan.l
 	flex -t scan.l >scan.c
-
 
 # Cleanup
 clean: force

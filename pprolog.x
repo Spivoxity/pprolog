@@ -14,8 +14,8 @@
 program &picoProlog(input, output);
 
 ifdef(fpc,uses sysutils;)
-
 ifdef(fpc,type integer = longint;)
+ifdef(fpc,{$NOTES OFF})
 
 { tunable parameters }
 const
@@ -2076,18 +2076,7 @@ begin
   until c = NULL
 end;
 
-ifdef(fpc,define(argc,paramcount+1)
-  define(argv,$2 := paramstr($1))
-  define(closein,close($1)))
-
-ifdef(fpc,function openin(var f: text; s: tempstring): boolean;
-  begin
-    if not fileexists(s) then
-      openin := false
-    else begin
-      assign(f, s); reset(f); openin := true
-    end
-  end;)
+ifdef(fpc,{$i pplib.inc})
 
 { |ReadProgram| -- read files listed on command line }
 procedure &ReadProgram;
