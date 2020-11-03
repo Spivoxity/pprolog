@@ -1,3 +1,3 @@
 # README #
 
-See http://spivey.oriel.ox.ac.uk/corner/PicoProlog
+See https://spivey.oriel.ox.ac.uk/corner/PicoProlog
