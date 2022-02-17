@@ -24,3 +24,6 @@ sem.o
 symtab.o
 type.o
 obc
+obProlog.k
+obprolog
+obProlog.m

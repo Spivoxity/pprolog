@@ -4,9 +4,9 @@ program ppp(input, output);
 
 const
   ARGMAX = 128;           { Max no. of args }
-  DEFMAX = 256;           { Max no. of macros }
-  STRMAX = 256;           { Max size of string }
-  BUFMAX = 4096;          { Size of pushback, arg, def buffers }
+  DEFMAX = 512;           { Max no. of macros }
+  STRMAX = 1024;          { Max size of string }
+  BUFMAX = 8192;          { Size of pushback, arg, def buffers }
   HASHSIZE = 127;         { Size of hash table }
 
 type
