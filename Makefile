@@ -14,6 +14,15 @@ pprolog.p: pprolog.x ppp
 	(echo "define(ptc)"; cat pprolog.x) | ./ppp >pprolog.p
 
 
+# A version written in Oberon and compiled with Mike's Oberon compiler
+
+obprolog: obProlog.m
+	obc -x $< -o $@
+
+obProlog.m: obProlog.x ppp
+	./ppp <$< | sed -e 's/{/(*/g' -e 's/}/*)/g' >$@
+
+
 # Pascal preprocessor 'ppp'
 
 ppp: ppp.c ptclib.i
@@ -35,9 +44,10 @@ fp-pprolog.p: pprolog.x fp-ppp
 fp-ppp: ppp.p
 	$(FPC) -o$@ $^
 
+
 # Pascal to C translator
 
-PTC = main.o sem.o expr.o type.o symtab.o emit.o library.o parse.o scan.o
+PTC = parse.o scan.o
 
 ptc: $(PTC)
 	$(CC) $(CFLAGS) -o ptc $(PTC)
@@ -53,7 +63,8 @@ scan.c: scan.l
 # Cleanup
 clean: force
 	rm -f ptc ppp pprolog *.o ppp.c pprolog.c pprolog.p \
-		parse.c parse.h scan.c fp-ppp fp-pprolog fp-pprolog.p 
+		parse.c parse.h scan.c fp-ppp fp-pprolog fp-pprolog.p \
+		obProlog.m obProlog.k obprolog
 
 force:
 

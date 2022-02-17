@@ -5,14 +5,14 @@
 #include <stdio.h>
 #include <ctype.h>
 
-EXTERN YYSTYPE yylval;
+extern YYSTYPE yylval;
 
-PUBLIC int line = 1;
+int line = 1;
 
-PRIVATE int lookup(char *t);
-PRIVATE int save_string(char *t, int kind);
+static int lookup(char *t);
+static int save_string(char *t, int kind);
 
-PRIVATE int yywrap(void) { return 1; }
+static int yywrap(void) { return 1; }
 %}
 
 %x COMMENT
@@ -39,11 +39,10 @@ PRIVATE int yywrap(void) { return 1; }
 
 %%
 
-PRIVATE ident hashtable[HASHSIZE];
-PRIVATE int n_idents = 0;
+static ident hashtable[HASHSIZE];
+static int n_idents = 0;
 
-PUBLIC ident enter(char *t, int lexval)
-{
+ident enter(char *t, int lexval) {
      unsigned h = 0;
      char *s;
      ident p;
@@ -69,8 +68,7 @@ found:
      return p;
 }
 
-PRIVATE int lookup(char *t)
-{
+static int lookup(char *t) {
      ident p = enter(t, IDENT);
      yylval.I = p;
      return p->i_lexval;
@@ -78,8 +76,7 @@ PRIVATE int lookup(char *t)
 
 static char buf[256];
 
-PRIVATE char *translit(char *s)
-{
+static char *translit(char *s) {
      char *t = buf;
 
      s++;
@@ -96,8 +93,7 @@ PRIVATE char *translit(char *s)
      return buf;
 }
 
-PRIVATE literal make_literal(int kind, char *v, type t)
-{
+static literal make_literal(int kind, char *v, type t) {
      literal p;
 
      p = (literal) malloc(sizeof(struct literal));
@@ -107,15 +103,13 @@ PRIVATE literal make_literal(int kind, char *v, type t)
      return p;
 }
 
-PUBLIC literal lit_cat(int kind, char *v1, char *v2, type t)
-{
+literal lit_cat(int kind, char *v1, char *v2, type t) {
      strcpy(buf, v1);
      strcat(buf, v2);
      return make_literal(kind, buf, t);
 }
 
-PRIVATE int save_string(char *t, int kind)
-{
+static int save_string(char *t, int kind) {
      char *tt;
 
      switch (kind) {
@@ -134,10 +128,9 @@ PRIVATE int save_string(char *t, int kind)
      return kind;
 }
 
-PUBLIC char *equiv[N_TOKENS];
+char *equiv[N_TOKENS];
 
-PUBLIC void def_op(char *name, int lexval, int op, char *eq)
-{
+void def_op(char *name, int lexval, int op, char *eq) {
      if (*name != '\0') {
 	  ident i = enter(name, lexval);
 	  i->i_op = op;
@@ -145,15 +138,14 @@ PUBLIC void def_op(char *name, int lexval, int op, char *eq)
      equiv[op] = eq;
 }
 
-PUBLIC void init_lex(void)
-{
+void init_lex(void) {
      int i;
 
      for (i = 0; i < N_TOKENS; i++)
 	  equiv[i] = "?!?";
 
      enter("array", ARRAY);
-     enter("begin", BEGN);
+     enter("begin", BEG);
      enter("case", CASE);
      enter("const", CONST);
      enter("do", DO);
