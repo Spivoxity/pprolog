@@ -1229,7 +1229,7 @@ static void gen_ch(char ch) {
 	  for (int i = 0; i < margin+2*STEP; i++) putchar(' ');
 	  max = MAX-margin-2*STEP;
 	  outptr -= brkpt+1;
-	  strncpy(buf, &buf[brkpt+1], outptr);
+	  memmove(buf, &buf[brkpt+1], outptr);
 	  brkpt = 0;
      }
 
